@@ -5,6 +5,7 @@
 #####################################################
 SCALA_VERSION="2.10.4"
 SBT_VERSION="0.13.1"
+ACTIVATOR_VERSION="1.2.0"
 #####################################################
 
 
@@ -12,7 +13,7 @@ SBT_VERSION="0.13.1"
 # Install NodeJS https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 ###########################################################################################
 sudo apt-get update
-sudo apt-get install -y python-software-properties g++
+sudo apt-get install -y python-software-properties g++ unzip
 sudo add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install -y nodejs
@@ -80,7 +81,7 @@ rm /tmp/sbt.deb
 
 
 ######################################################################################################################
-# Install remaining dependencies required by scala & sbt
+# Install dependencies for scala & sbt
 #
 # Output:
 #        ==> default: The following packages have unmet dependencies:
@@ -94,3 +95,29 @@ rm /tmp/sbt.deb
 ######################################################################################################################
 sudo apt-get -y -f install
 ######################################################################################################################
+
+
+######################################################################################################################
+# Install Typesafe Reactive Platform
+# - Activator 1.2.0
+# - Akka 2.3.3
+# - Play 2.3.0
+# - Scala 2.11.1
+######################################################################################################################
+curl -O http://downloads.typesafe.com/typesafe-activator/${ACTIVATOR_VERSION}/typesafe-activator-${ACTIVATOR_VERSION}
+readonly activator_zip="typesafe-activator-${ACTIVATOR_VERSION}.zip"
+sudo unzip "$activator_zip" -d /usr/bin
+rm /tmp/typesafe-activator-${ACTIVATOR_VERSION}.zip  
+sudo chmod a+x /usr/bin/activator-${ACTIVATOR_VERSION}/activator
+sudo apt-get update
+#######################################################################################################################
+
+
+########################################################################################################################
+# Configure bash profile 
+########################################################################################################################
+cd /home/vagrant
+touch .bash_profile
+echo 'export PATH=$PATH:/usr/bin/activator-${ACTIVATOR_VERSION}' >> ~/.bash_profile
+sudo apt-get update
+
